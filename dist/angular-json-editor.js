@@ -70,7 +70,8 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
         }],
         link: function (scope, element, attrs, controller, transclude) {
             var startValPromise = $q.when(scope.startval),
-                schemaPromise = $q.when(scope.schema);
+                schemaPromise = $q.when(scope.schema),
+                isFormDirty = false;
 
             scope.isValid = false;
 
@@ -85,6 +86,13 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                     startVal = result[1].data || result[1];
                 if (schema === null) {
                     throw new Error('angular-json-editor: could not resolve schema data.');
+                }
+
+                function checkFormDirtyStatus() {
+                  let formElement = $(element[0]).find('form');
+                  $(formElement.find(':input')).on('change input', function () {
+                    isFormDirty = true;
+                  });
                 }
 
                 function restart() {
@@ -109,10 +117,12 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                 }
 
                 function editorChange() {
+                    checkFormDirtyStatus()
                     // Fire the onChange callback
                     if (typeof scope.onChange === 'function') {
                         scope.onChange({
-                            $editorValue: scope.editor.getValue()
+                            $editorValue: scope.editor.getValue(),
+                            $isFormDirty: isFormDirty
                         });
                     }
                     // reset isValid property onChange
