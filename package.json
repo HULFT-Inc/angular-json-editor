@@ -16,6 +16,6 @@
         "grunt-contrib-connect": "1.0.*"
     },
     "dependencies": {
-        "json-editor": "^0.7.28"
+        "json-editor": "https://github.com/v2sandeep/json-editor.git#master"
     }
 }
