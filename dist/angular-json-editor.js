@@ -139,20 +139,6 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
 
                 restart();
 
-                // update schema if changed
-                scope.$watch('schema', function (newVal) {
-                    //update newScheme
-                    if (newVal.then) {
-                        newVal.then(function (data) {
-                            schema = data;
-                            restart();
-                        });
-                    } else {
-                        schema = newVal;
-                        restart();
-                    }
-                }, true);
-
                 // update schema if promise
                 scope.$watchCollection('schema', function (newVal) {
                     if (newVal instanceof $q) {
