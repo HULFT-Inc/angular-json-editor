@@ -16,6 +16,6 @@
         "grunt-contrib-connect": "1.0.*"
     },
     "dependencies": {
-        "json-editor": "https://github.com/HULFT-Inc/json-editor.git#0.7.30"
+        "json-editor": "https://github.com/HULFT-Inc/json-editor.git#0.7.31"
     }
 }
