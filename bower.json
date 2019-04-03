@@ -20,7 +20,7 @@
         "node_modules"
     ],
     "dependencies": {
-        "json-editor": "https://github.com/HULFT-Inc/json-editor.git#0.7.31",
+        "json-editor": "https://github.com/HULFT-Inc/json-editor.git#0.7.32",
         "angular": "1.*"
     }
 }
