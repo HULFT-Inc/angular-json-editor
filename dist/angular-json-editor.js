@@ -93,7 +93,7 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                 function checkFormDirtyStatus() {
                   $($(element[0]).find(':input')).on('change input', function () {
                     isFormDirty = true;
-                    // // Fire the modified callback for immidiate return of form-dirty status
+                    // Fire the modified callback for immidiate return of form-dirty status
                     if (typeof scope.modified === 'function') {
                         return scope.modified({
                             $isFormDirty: isFormDirty,
