@@ -49,7 +49,8 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
             schema: '=',
             startval: '=',
             buttonsController: '@',
-            onChange: '&'
+            onChange: '&',
+            modified: '&'
         },
         controller: ['$scope', '$attrs', '$controller', function ($scope, $attrs, $controller) {
             var controller, controllerScope, controllerName = $attrs.buttonsController;
@@ -92,6 +93,12 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                 function checkFormDirtyStatus() {
                   $($(element[0]).find(':input')).on('change input', function () {
                     isFormDirty = true;
+                    // // Fire the modified callback for immidiate return of form-dirty status
+                    if (typeof scope.modified === 'function') {
+                        return scope.modified({
+                            $isFormDirty: isFormDirty,
+                        });
+                    }
                   });
                 }
 
