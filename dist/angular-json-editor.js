@@ -105,7 +105,7 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                 function restart() {
                     var values = startVal;
                     if (scope.editor && scope.editor.destroy) {
-                        values = scope.editor.getValue();
+                        // values = scope.editor.getValue();
                         scope.editor.destroy();
                     }
 
@@ -159,6 +159,34 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                         });
                     }
                 });
+
+                scope.$watch('schema', function (newVal, oldVal) {
+                  if (newVal.success) {
+                      newVal.success(function (data) {
+                          schema = data;
+                          if (scope.editor) {
+                            startVal = scope.editor.getValue();
+                          }
+                      });
+                  } else {
+                      schema = newVal;
+                      if (scope.editor) {
+                        startVal = scope.editor.getValue();
+                      }
+                  }
+                  restart();
+              }, true);
+
+              scope.$watch('startval', function (newVal, oldVal) {
+                  if (newVal && newVal.success) {
+                      newVal.success(function (data) {
+                          startVal = data;
+                      });
+                  } else {
+                      startVal = newVal;
+                  }
+                  restart();
+              }, true);
 
                 // resetting the data
                 scope.$on('eventReset', function(event, data) {
