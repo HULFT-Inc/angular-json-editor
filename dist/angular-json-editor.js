@@ -105,7 +105,6 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                 function restart() {
                     var values = startVal;
                     if (scope.editor && scope.editor.destroy) {
-                        // values = scope.editor.getValue();
                         scope.editor.destroy();
                     }
 
