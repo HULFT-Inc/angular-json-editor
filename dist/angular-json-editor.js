@@ -102,6 +102,20 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                   });
                 }
 
+                function removeFieldsToHide () {
+                  angular.forEach(schema.properties, function(value, key) {
+                    if (value.hideField === true) {
+                      delete schema.properties[key];
+                      delete startVal[key];
+                      _.remove(schema.required, function(element) {
+                        return element === key;
+                      });
+                    }
+                  });
+                  return schema;
+                }
+                schema =  removeFieldsToHide();
+
                 function restart() {
                     var values = startVal;
                     if (scope.editor && scope.editor.destroy) {
