@@ -104,13 +104,25 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
 
                 function removeFieldsToHide () {
                   angular.forEach(schema.properties, function(value, key) {
-                    if (value.hideField === true) {
-                      delete schema.properties[key];
-                      delete startVal[key];
-                      _.remove(schema.required, function(element) {
-                        return element === key;
-                      });
-                    }
+                    if (value.type === 'string') {
+                        if (value.hideField === true) {
+                            delete schema.properties[key];
+                            delete startVal[key];
+                            _.remove(schema.required, function(element) {
+                              return element === key;
+                            });
+                          }
+                      } else if (value.type === 'array') {
+                          angular.forEach(value.items.properties, function (key1, val1) {
+                            if (key1.hideField === true) {
+                                delete schema.properties[key].items.properties[val1];
+                                delete startVal[key][0][val1];
+                                _.remove(value.items.required, function(element) {
+                                  return element === val1;
+                                });
+                              }
+                          });
+                      }
                   });
                   return schema;
                 }
