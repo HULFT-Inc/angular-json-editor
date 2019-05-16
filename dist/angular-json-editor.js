@@ -116,7 +116,9 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                           angular.forEach(value.items.properties, function (key1, val1) {
                             if (key1.hideField === true) {
                                 delete schema.properties[key].items.properties[val1];
-                                delete startVal[key][0][val1];
+                                for (var i = 0; i < startVal[key].length; i++) {
+                                    delete startVal[key][i][val1];
+                                }   
                                 _.remove(value.items.required, function(element) {
                                   return element === val1;
                                 });
