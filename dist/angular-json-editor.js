@@ -102,31 +102,38 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                   });
                 }
 
+                function removeFields (key) {
+                    delete schema.properties[key];
+                    delete startVal[key];
+                    _.remove(schema.required, function(element) {
+                      return element === key;
+                    });
+                }
                 function removeFieldsToHide () {
-                  angular.forEach(schema.properties, function(value, key) {
+                angular.forEach(schema.properties, function(value, key) {
                     if (value.type === 'string') {
                         if (value.hideField === true) {
-                            delete schema.properties[key];
-                            delete startVal[key];
-                            _.remove(schema.required, function(element) {
-                              return element === key;
+                            removeFields(key);
+                        }
+                    } else if (value.type === 'array') {
+                        if (value.hideField === true) {
+                            removeFields(key);
+                        } else {
+                            angular.forEach(value.items.properties, function (key1, val1) {
+                                if (key1.hideField === true) {
+                                    delete schema.properties[key].items.properties[val1];
+                                    for (var i = 0; i < startVal[key].length; i++) {
+                                        delete startVal[key][i][val1];
+                                    }   
+                                    _.remove(value.items.required, function(element) {
+                                    return element === val1;
+                                    });
+                                }
                             });
-                          }
-                      } else if (value.type === 'array') {
-                          angular.forEach(value.items.properties, function (key1, val1) {
-                            if (key1.hideField === true) {
-                                delete schema.properties[key].items.properties[val1];
-                                for (var i = 0; i < startVal[key].length; i++) {
-                                    delete startVal[key][i][val1];
-                                }   
-                                _.remove(value.items.required, function(element) {
-                                  return element === val1;
-                                });
-                              }
-                          });
-                      }
-                  });
-                  return schema;
+                        }
+                    }
+                });
+                return schema;
                 }
                 schema =  removeFieldsToHide();
 
