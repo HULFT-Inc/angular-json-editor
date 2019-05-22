@@ -180,47 +180,22 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
 
                 restart();
 
-                // update schema if promise
-                scope.$watchCollection('schema', function (newVal) {
-                    if (newVal instanceof $q) {
-                        newVal.then(function (data) {
-                            if (data.data) {
-                                schema = data.data;
-                            } else {
-                                schema = data;
-                            }
-                            restart();
-                        });
-                    }
-                });
-
                 scope.$watch('schema', function (newVal, oldVal) {
-                  if (newVal.success) {
-                      newVal.success(function (data) {
-                          schema = data;
-                          if (scope.editor) {
-                            startVal = scope.editor.getValue();
-                          }
-                      });
-                  } else {
+                    if (newVal) {
                       schema = newVal;
                       if (scope.editor) {
                         startVal = scope.editor.getValue();
                       }
+                   }
+                    restart();
+                  }, true);
+  
+                scope.$watchCollection('startval', function (newVal, oldVal) {
+                  if (newVal) {
+                    startVal = newVal;
                   }
                   restart();
-              }, true);
-
-              scope.$watch('startval', function (newVal, oldVal) {
-                  if (newVal && newVal.success) {
-                      newVal.success(function (data) {
-                          startVal = data;
-                      });
-                  } else {
-                      startVal = newVal;
-                  }
-                  restart();
-              }, true);
+                }, true);
 
                 // resetting the data
                 scope.$on('eventReset', function(event, data) {
