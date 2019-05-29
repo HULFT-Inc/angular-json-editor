@@ -138,6 +138,7 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                 
                 scope.$watch(function(){
                     schema =  removeFieldsToHide();
+                    restart();
                 })
 
                 function restart() {
