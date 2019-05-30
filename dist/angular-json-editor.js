@@ -137,20 +137,13 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                 });
                 return schema;
                 }
-                
-                scope.$watch(function(){
-                    schema =  removeFieldsToHide();
-                    restart();
-                })
-
                 function restart() {
-                    var values = startVal;
                     if (scope.editor && scope.editor.destroy) {
                         scope.editor.destroy();
                     }
-
+                    schema = removeFieldsToHide(schema);
                     scope.editor = new JSONEditor(element[0], {
-                        startval: values,
+                        startval: startVal,
                         schema: schema
                     }, true);
 
@@ -186,22 +179,18 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
 
                 restart();
 
-                scope.$watch('schema', function (newVal, oldVal) {
-                    if (newVal) {
-                      schema = newVal;
-                      if (scope.editor) {
-                        startVal = scope.editor.getValue();
-                      }
-                   }
-                    restart();
-                  }, true);
-  
-                scope.$watchCollection('startval', function (newVal, oldVal) {
-                  if (newVal) {
-                    startVal = newVal;
+                scope.$watchGroup(['schema', 'startval'], function (newVal, oldVal) {
+                  if (newVal[0]) {
+                    schema = newVal[0];
+                    if (scope.editor) {
+                      startVal = scope.editor.getValue();
+                    }
+                  }
+                  if (newVal[1]) {
+                    startVal = newVal[1];
                   }
                   restart();
-                }, true);
+                });
 
                 // resetting the data
                 scope.$on('eventReset', function(event, data) {
