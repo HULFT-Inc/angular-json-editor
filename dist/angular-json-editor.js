@@ -112,15 +112,15 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                 function removeFieldsToHide () {
                 angular.forEach(schema.properties, function(value, key) {
                     if (value.type === 'string') {
-                        if (value.hideField === true) {
+                        if (value.hideField) {
                             removeFields(key);
                         }
                     } else if (value.type === 'array') {
-                        if (value.hideField === true) {
+                        if (value.hideField) {
                             removeFields(key);
                         } else {
                             angular.forEach(value.items.properties, function (key1, val1) {
-                                if (key1.hideField === true) {
+                                if (key1.hideField) {
                                     delete schema.properties[key].items.properties[val1];
                                     if(startVal[key]){
                                         for (var i = 0; i < startVal[key].length; i++) {
@@ -131,6 +131,13 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                                     return element === val1;
                                     });
                                 }
+                                if (key1.format === 'date') {
+                                  if(startVal[key]){
+                                    for (var i = 0; i < startVal[key].length; i++) {
+                                      startVal[key][i][val1] = moment(startVal[key][i][val1], ['MM-DD-YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY']).format('YYYY-MM-DD');
+                                     }
+                                  }
+                                };
                             });
                         }
                     }
