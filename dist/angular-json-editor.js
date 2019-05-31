@@ -109,8 +109,14 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                       return element === key;
                     });
                 }
+
+                function changeDateFormat(inputDate) {
+                  return moment(inputDate, ['MM-DD-YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY']).format('YYYY-MM-DD');
+                }
+
                 function removeFieldsToHide () {
                 angular.forEach(schema.properties, function(value, key) {
+                    startVal[key] = (value.format === 'date') ? changeDateFormat(startVal[key]) : startVal[key];
                     if (value.type === 'string') {
                         if (value.hideField) {
                             removeFields(key);
@@ -134,7 +140,7 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                                 if (key1.format === 'date') {
                                   if(startVal[key]){
                                     for (var i = 0; i < startVal[key].length; i++) {
-                                      startVal[key][i][val1] = moment(startVal[key][i][val1], ['MM-DD-YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY']).format('YYYY-MM-DD');
+                                      startVal[key][i][val1] = changeDateFormat(startVal[key][i][val1]);
                                      }
                                   }
                                 };
