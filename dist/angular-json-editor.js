@@ -122,10 +122,12 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                             removeFields(key);
                         }
                     } else if (value.type === 'array') {
+                        var checkAllItemsHidden = [];
                         if (value.hideField) {
                             removeFields(key);
                         } else {
                             angular.forEach(value.items.properties, function (key1, val1) {
+                                checkAllItemsHidden.push(key1.hideField);
                                 if (key1.hideField) {
                                     delete schema.properties[key].items.properties[val1];
                                     if(startVal[key]){
@@ -145,6 +147,10 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                                   }
                                 };
                             });
+                            var allHidden = !!checkAllItemsHidden.reduce(function(a, b){ return (a === b) ? a : NaN; });
+                            if(allHidden){
+                             removeFields(key);
+                            }
                         }
                     }
                 });
