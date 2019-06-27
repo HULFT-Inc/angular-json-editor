@@ -147,7 +147,7 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                                   }
                                 };
                             });
-                            var allHidden = !!checkAllItemsHidden.reduce(function(a, b){ return (a === b) ? a : NaN; });
+                            var allHidden = !!checkAllItemsHidden.reduce(function(a, b){ return (a === b) ? a : NaN; }, 0);
                             if(allHidden){
                              removeFields(key);
                             }
