@@ -152,6 +152,25 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                              removeFields(key);
                             }
                         }
+                    } else if (value.type === 'object') {
+                      if (value.hideField) {
+                        removeFields(key);
+                      } else {
+                        angular.forEach(value.properties, function (objectKey, ObjectVal) {
+                          if (objectKey.hideField) {
+                            delete schema.properties[key].properties[ObjectVal];
+                            _.remove(value.required, function(element) {
+                              return element === ObjectVal;
+                            });
+                            if (startVal[key]) {
+                              delete startVal[key][ObjectVal];
+                            }
+                          }
+                          if (!objectKey.hideField && objectKey.format === 'date' && startVal[key]) {
+                            startVal[key][ObjectVal] = changeDateFormat(startVal[key][ObjectVal]);
+                          }
+                        });
+                      }
                     }
                 });
                 return schema;
