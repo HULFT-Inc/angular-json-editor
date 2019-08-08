@@ -180,7 +180,7 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                   angular.forEach(schema.properties, function(value, key) {
                     // to display object as a table in view
                     if (value && value.type === 'object' && value.format === 'table') {
-                      let objectsArray = [];
+                      var objectsArray = [];
                       objectsArray.push(startVal[key]);
                       startVal[key] = objectsArray;
                       value.items = {};
