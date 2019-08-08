@@ -175,13 +175,30 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                 });
                 return schema;
                 }
+
+                function modifyStartValue(schema, startVal) {
+                  angular.forEach(schema.properties, function(value, key) {
+                    // to display object as a table in view
+                    if (value && value.type === 'object' && value.format === 'table') {
+                      let objectsArray = [];
+                      objectsArray.push(startVal[key]);
+                      startVal[key] = objectsArray;
+                      value.items = {};
+                      value.items.properties = value.properties;
+                      value.items.required = value.required;
+                      value.type = 'array';
+                    }
+                  });
+                  return startVal;
+                }
+
                 function restart() {
                     if (scope.editor && scope.editor.destroy) {
                         scope.editor.destroy();
                     }
                     schema = removeFieldsToHide(schema);
                     scope.editor = new JSONEditor(element[0], {
-                        startval: startVal,
+                        startval: modifyStartValue(schema, startVal),
                         schema: schema
                     }, true);
 
