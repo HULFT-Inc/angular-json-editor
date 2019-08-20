@@ -188,6 +188,14 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                       value.items.required = value.required;
                       value.type = 'array';
                     }
+                    if (value && value.type === 'array' && value.format === 'table') {
+                       // to display array type but value is object as a table in view
+                        if (startVal[key] && typeof startVal[key] === 'object' && startVal[key].constructor === Object) {
+                          var objectsArray = [];
+                          objectsArray.push(startVal[key]);
+                          startVal[key] = objectsArray;
+                        }
+                      }
                   });
                   return startVal;
                 }
