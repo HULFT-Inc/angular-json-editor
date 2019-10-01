@@ -130,9 +130,11 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                                 checkAllItemsHidden.push(key1.hideField);
                                 if (key1.hideField) {
                                     delete schema.properties[key].items.properties[val1];
-                                    if(startVal[key]){
+                                    if (startVal[key] && typeof startVal[key] === 'object' && startVal[key].constructor === Object) {
+                                        delete startVal[key][val1];
+                                    } else {
                                         for (var i = 0; i < startVal[key].length; i++) {
-                                            delete startVal[key][i][val1];
+                                          delete startVal[key][i][val1];
                                         }
                                     }
                                     _.remove(value.items.required, function(element) {
