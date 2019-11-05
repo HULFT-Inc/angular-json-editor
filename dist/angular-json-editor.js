@@ -189,6 +189,7 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                       value.items.properties = value.properties;
                       value.items.required = value.required;
                       value.type = 'array';
+                      value.minItems = 1;
                     }
                     if (value && value.type === 'array' && value.format === 'table') {
                        // to display array type but value is object as a table in view
