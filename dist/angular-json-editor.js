@@ -275,6 +275,10 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
 
 
             });
+            scope.$on('$destroy', function() {
+              scope.schema = '';
+              scope.startval = '';
+            });
         }
     };
 }]);
